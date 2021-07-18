@@ -11,7 +11,7 @@ function App() {
 
   const [moves, setMoves] = useState<number>(0)
   const [bestScore, setBestScore] = useState<number>(
-    parseInt(localStorage.getItem('bestScore') || '0')
+    parseInt(localStorage.getItem('bestScore') || '0') || Number.MAX_SAFE_INTEGER
   )
   const finishGameCallback = () => {
     const newBestScore = moves < bestScore ? moves : bestScore

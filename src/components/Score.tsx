@@ -13,7 +13,7 @@ function Score(props:ScoreProps) {
         <div>
           <span>Moves:</span> {props.moves}
         </div>
-        {props.bestScore && (
+        {localStorage.getItem('bestScore') && (
           <div>
             <span>Best score:</span> {props.bestScore}
           </div>
