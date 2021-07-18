@@ -1,0 +1,10 @@
+html, body {
+  height: 100%;
+  background: #e0feff;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
