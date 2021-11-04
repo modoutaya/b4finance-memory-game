@@ -19,9 +19,6 @@ export const useProgress = (maxTimeInSeconds: number): [number, (() => void)] =>
 
         if(elapsedTime >= maxTimeInSeconds) {
             clearInterval(timeout.current);
-            // setTimeout(() => {
-            //     window.location.reload()
-            // }, 100);
         }
     }, [elapsedTime, maxTimeInSeconds]);
 
