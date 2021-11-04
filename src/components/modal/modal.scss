@@ -1,0 +1,73 @@
+.modalBackground {
+  width: 100%;
+  height: 100%;
+  background-color: #949090cb;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .modalContainer {
+    width: 445px;
+    height: 120px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: #000000 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+
+    .titleCloseBtn {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    }
+
+    .body {
+      flex: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.7rem;
+      text-align: center;
+
+      .player {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+      }
+    }
+
+    p {
+      font-size: larger;
+      text-align: center;
+    }
+
+    .footer {
+      flex: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      button {
+        width: 110px;
+        height: 30px;
+        margin: 10px;
+        border: none;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 8px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+    }
+  }
+}

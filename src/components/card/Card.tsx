@@ -1,5 +1,5 @@
 import classnames from 'classnames'
-import '../scss/card.scss'
+import './card.scss'
 
 
 type CardProps = {
@@ -11,19 +11,18 @@ type CardProps = {
   isDisabled: boolean
 }
 
-function Card(props: CardProps) {
-
+const Card: React.FC<CardProps> = ({ id, image, onClick, isInactive, isFlipped, isDisabled }) => {
   const backSide = '/images/backside.png'
 
   const handleClick = () => {
-    !props.isFlipped && !props.isDisabled && props.onClick(props.id);
+    !isFlipped && !isDisabled && onClick(id);
   };
 
   return (
     <div
       className={classnames("card", {
-        "is-flipped": props.isFlipped,
-        "is-inactive": props.isInactive
+        "is-flipped": isFlipped,
+        "is-inactive": isInactive
       })}
       onClick={handleClick}
     >
@@ -31,7 +30,7 @@ function Card(props: CardProps) {
         <img src={backSide} alt="card backside" />
       </div>
       <div className="card-face card-back-face">
-        <img src={props.image} alt="card" />
+        <img src={image} alt="card" />
       </div>
     </div>
   )

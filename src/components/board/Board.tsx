@@ -1,19 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import Card from './Card'
-import '../scss/board.scss'
-
+import Card from '../card/Card'
+import './board.scss'
 
 type BoardProps = {
   setMoves: React.Dispatch<React.SetStateAction<number>>
-  finishGameCallback: () => void
-  cardIds: Array<number>
+  finishedGame: () => void
+  images: { id: number; url: string }[]
 }
 
-function Board(props: BoardProps) {
-  const [openCards, setOpenCards] = useState<Array<number>>([]);
-  const [clearedCards, setClearedCards] = useState<Array<number>>([]);
+const Board: React.FC<BoardProps> = ({ setMoves, finishedGame, images }) => {
+  const [openCards, setOpenCards] = useState<number[]>([]);
+  const [clearedCards, setClearedCards] = useState<number[]>([]);
   const [shouldDisableAllCards, setShouldDisableAllCards] = useState<boolean>(false);
-  const timeout = useRef<NodeJS.Timeout>(setTimeout(()=>{}));
+  const timeout = useRef<NodeJS.Timeout>(setTimeout(() => { }));
 
   const disable = () => {
     setShouldDisableAllCards(true);
@@ -22,33 +21,12 @@ function Board(props: BoardProps) {
     setShouldDisableAllCards(false);
   };
 
-  const checkCompletion = () => {
-    if (clearedCards.length === props.cardIds.length) {
-     props.finishGameCallback()
-    }
-  }
-
-  const evaluate = () => {
-    const [first, second] = openCards;
-    enable();
-    // check if first card is equal second card
-    if ((first % 6 + 1) === (second % 6 + 1)) {
-      setClearedCards((prev) => [...prev, first, second]);
-      setOpenCards([]);
-      return;
-    }
-    // flip the cards back after 500ms duration
-    timeout.current = setTimeout(() => {
-      setOpenCards([]);
-    }, 500);
-  }
-
   const handleCardClick = (id: number) => {
     if (openCards.length === 1) {
       // in this case we have alredy selected one card
       // this means that we are finishing a move
       setOpenCards((prev) => [...prev, id]);
-      props.setMoves((moves) => moves + 1)
+      setMoves((moves) => moves + 1)
       disable();
     } else {
       // in this case this is the first card we select
@@ -58,18 +36,38 @@ function Board(props: BoardProps) {
   };
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout = setTimeout(()=>{});
+    let oppeningTimeout: NodeJS.Timeout = setTimeout(() => { });
+    const evaluate = () => {
+      const [first, second] = openCards;
+      enable();
+      // check if first card is equal second card
+      if (images[first].id === images[second].id) {
+        setClearedCards((prev) => [...prev, first, second]);
+        setOpenCards([]);
+        return;
+      }
+      // flip the cards back after 500ms duration
+      timeout.current = setTimeout(() => {
+        setOpenCards([]);
+      }, 500);
+    }
+
     if (openCards.length === 2) {
-      timeout = setTimeout(evaluate, 300);
+      oppeningTimeout = setTimeout(evaluate, 300);
     }
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(oppeningTimeout);
     };
-  }, [openCards]);
+  }, [openCards, images]);
 
   useEffect(() => {
+    const checkCompletion = () => {
+      if (clearedCards.length === images.length && images.length > 0) {
+        finishedGame()
+      }
+    }
     checkCompletion();
-  }, [clearedCards]);
+  }, [images, clearedCards]);
 
   const checkIsFlipped = (id: number) => {
     return clearedCards.includes(id) || openCards.includes(id);
@@ -81,10 +79,10 @@ function Board(props: BoardProps) {
 
   return (
     <div className={'board'}>
-      {props.cardIds.map(i => {
+      {images.map((image, i) => {
         return <Card
           key={i}
-          image={`/images/${i % 6 + 1}.png`}
+          image={`${image.url}`}
           id={i}
           isDisabled={shouldDisableAllCards}
           isInactive={checkIsInactive(i)}
